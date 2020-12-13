@@ -3,22 +3,22 @@ Anforderungen – UNO – WEB II – 2020
 Nr.	Anforderung – Das Unosystem …	Status	Hinweise
 	
 2	muss gleiche SpierlerInnen Namen verhindern.		
-3	muss alle Karten aller SpielerInnen darstellen.		                                                                                        silke
-4	muss nach einer SpielerInnen Aktion etwaige neue Karten darstellen bzw. alte Karten entfernen.	                                        	silke
+3
+4	muss nach einer SpielerInnen Aktion etwaige neue Karten darstellen bzw. alte Karten entfernen.	   (geht fast)                                     	silke
 	
-6	muss die Punkte aller SpielerInnen darstellen.		
-7	muss nach einer SpielerInnen Aktion etwaige Punkteveränderungen darstellen.		
+6	
+7	muss nach einer SpielerInnen Aktion etwaige Punkteveränderungen darstellen.		(sollte eigentlich schon gehen)
 8	muss aktive/n SpielerIn visuell hervorheben.		
-9	muss die aufgedeckte Karte darstellen.		                                                                                                leonie
-10	muss den Abhebestapel darstellen.	                                                                                                       	leonie
-11	muss für die aktive Spielerin/den aktiven Spieler die Möglichkeit bieten eine Karte zu spielen.		
+9			                                                                                                
+10	                                                                                                       	
+11	muss für die aktive Spielerin/den aktiven Spieler die Möglichkeit bieten eine Karte zu spielen.		(geht auch fast)
 12	muss das Spielen einer Karte animieren.		
-13	muss nach dem Spielen einer Karte die aufgedeckte Karte aktualisieren.		
-14	muss für die aktive Spielerin/den aktiven Spieler die Möglichkeit bieten eine Karte abzuheben.		
+13	muss nach dem Spielen einer Karte die aufgedeckte Karte aktualisieren.	(geht eigentlich auch)	
+14		
 15	muss das Abheben einer Karte animieren.		
 16	muss ungültige Aktionen animieren.		
 17	muss das Spiel beenden und SiegerIn visualisieren, wenn eine Person keine Karten mehr besitzt.		
-18	muss die Wahl einer Farbe erlauben, wenn eine Uno Sonderkarte gespielt wurde.		
+18	muss die Wahl einer Farbe erlauben, wenn eine Uno Sonderkarte gespielt wurde.		(halb fertig)
 19	muss die gewählte Farbe nach einer Farbwahl visualisieren.		
 20	soll unnötige Anfragen an den Server verhindern. (z.B. Falsche Karte gespielt, nicht aktive SpielerIn versucht Karte zu spielen)		
 21	soll nett aussehen 		

@@ -1,62 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="UTF-8">
-<title>Leo & Silke's mean uno game</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="unoStyle.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-<style>
-</style>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leo & Silke's mean uno game</title>
+  <link rel="stylesheet" href="unoStyle.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
 
 <body>
-
-<div class="containerPlayers">
-<div class = "player-row justify-contents-between">
-    <div class="col-3">
-         <p id="player1name">Player 1</p>   
-    </div>
-    <div id="player1Placement" class="col-3 align-self-start">
-        <br> 
-        <h6>Pretend there are cards here</h6>
-        <div class="d-flex flex-fill flex-row cards" id="p1cards"></div>
-        <div class="points" id="score1"></div>
-    </div>
-</div>
-<div class="player-row">
-    <div class="col-3">
-        <p id="player2name">Player 2</p>   
-   </div>
-    <div id="player2Placement" class="col-3">
-        <br> 
-        <h6>Pretend there are cards here</h6>
-        <div class="d-flex flex-fill flex-row cards" id="p2cards"></div>
-        <div class="points" id="score2"></div>
-    </div>
-</div>
-<div class="player-row">
-    <div class="col-3">
-        <p id="player3name">Player 3</p>   
-   </div>
-    <div id="player3Placement" class="col-3">
-        <br> 
-        <h6>Pretend there are cards here</h6>
-        <div class="d-flex flex-fill flex-row cards" id="p3cards"></div>
-        <div class="points" id="score3"></div>
-    </div>
-</div>
-<div class = "player-row">
-    <div id="player4Placement" class="col-3">
-        <p id="player4name">Player 4</p>   
-   </div>  
-    <div class="col-3 align-self-end">
-        <br> 
-        <h6>Pretend there are cards here</h6>
-        <div class="d-flex flex-fill flex-row cards" id="p4cards"></div>
-        <div class="points" id="score4"></div>
-    </div>
-</div>
-</div>
-
+  <div class="container-fluid">
+    <div class="row playmat">
+      <div class="row justify-content-between">
+        <div class="col-6 align-items-start">
+          <br>
+          <p class="player" id='player1'>Player 1</p>
+          <div class="points" id="score1"></div>
+          <div class="d-flex flex-fill flex-row" id="player1cards">
+          </div>
+          <br>
+        </div>
+        <div class="col-6 align-items-end">
+          <br>
+          <p class="player" id='player2'> Player 2</p>
+          <div class="points" id="score2"></div>
+          <div class="d-flex flex-fill flex-row" id="player2cards"></div>
+          <br>
+        </div>
+      </div>
+      <div class="row justify-content-center">
 <br>
 
 <div class="container playground">
@@ -72,7 +45,30 @@
 </div>
 </div>
 
+<div class="row justify-content-between">
+  <!--PLAYER 3 Left corner down-->
+  <div class="col-6 align-self-start">
+    <br>
+    <p class="player" id='player3'>Player 3</p>
+    <div class="points" id="score3"></div>
+    <div class="d-flex flex-row" id="player3cards"></div>
 
+    <br>
+  </div>
+  <!--
+    ND Player 3-->
+  <!--PLAYER 4 Right corner down-->
+  <div class="col-6 align-self-end">
+    <br>
+    <p class="player" id='player4'>Player 4</p>
+    <div class="points" id="score4"></div>
+    <div class="d-flex flex-row" id="player4cards"></div>
+
+    <br>
+  </div>
+  <!--END Player 4-->
+</div>
+</div>
 
   <div class="modal fade" id="playerNames" tabindex="-1" role="dialog"
   data-keyboard="false" data-backdrop="static">
@@ -103,6 +99,34 @@
   </form>   
   </div>
 
+  <div class="ChooseColorModalDialog">
+    <div class="modal fade" id="wildcolor" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+      <form id="ChooseColorForm">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Players:</h5>
+            </div>
+            <div class="modal-body" id="chooseColor">
+              <div class="form-group">
+                <button type="submit" class="form-control" id="red">red</button>
+                </br>
+                <input type="submit" class="form-control" id="blue">blue</button>
+                </br>
+                <input type="submit" class="form-control" id="green">green</button>
+                </br>
+                <input type="submit" class="form-control" id="yellow">yellow</button>
+                </br>
+              </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
 
 </body>
