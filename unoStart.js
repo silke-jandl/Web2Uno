@@ -6,7 +6,7 @@ let handCards = [];
 let currentPlayer;
 let gameId;
 let newGame = {};
-let Players = {};
+let Player = {};
 let Card = {
     color: '',
     value: '',
@@ -19,6 +19,7 @@ let removeCardValue ;
 let img;
 let topCard;
 let cardArray;
+let itsThisPlayersTurn;
 
 async function post() {
     let response = await fetch("https://nowaunoweb.azurewebsites.net/api/game/start", {
@@ -39,23 +40,21 @@ async function post() {
 
         newGame.topCard = result.TopCard;
         currentPlayer = result.NextPlayer;
+        console.log(currentPlayer);
 
         handCards.push(document.getElementById("player1cards").id);
         handCards.push(document.getElementById("player2cards").id);
         handCards.push(document.getElementById("player3cards").id);
         handCards.push(document.getElementById("player4cards").id);
 
-
         newGame.Id = result.Id;
         newGame.Players = result.Players;
         newGame.NextPlayer = result.NextPlayer;
         newGame.TopCard = result.TopCard;
 
-
-        Players.Player = result.Players.Player;
-        Players.Cards = result.Players.Card;
-        Players.Score = result.Players.Score;
-
+        Player.Player = result.Players.Player;
+        Player.Cards = result.Players.Card;
+        Player.Score = result.Players.Score;
 
         Card.Color = result.Color;
         Card.Text = result.Text;
@@ -69,7 +68,7 @@ async function post() {
         startkarte = newGame.TopCard;
 
         for (let i = 0; i < handCards.length; i++) {
-            for (let j = 0; j < 7; j++) {
+            for (let j = 0; j < result.Players[i].Cards.length; j++) {
                 let karte = document.createElement("div");
                 karte.setAttribute("id", i + "cardToPlay" + j)
                 karte.setAttribute("onclick", "getIdOfClickedCard(this.id)");
@@ -99,10 +98,12 @@ async function post() {
         }
         const btnDraw = document.getElementById('drawCard');
         btnDraw.addEventListener("click", drawCard);
-        
 
         cardArray = getCards();
         topCard = getTopCard();
+
+        itsThisPlayersTurn = names.indexOf(currentPlayer);
+        alert(itsThisPlayersTurn);
     }
     else {
         alert("HTTP-Error: " + response.status)
@@ -227,7 +228,8 @@ function getIdOfClickedCard(clickedId) {
 
 function checkCards(clickedId) {
 
-    let itsThisPlayersTurn = players.indexOf(currentPlayer);
+    itsThisPlayersTurn = names.indexOf(currentPlayer);
+    //itsThisPlayersTurn = players.indexOf(currentPlayer);
     let indexOfCardInArray = clickedId.charAt(clickedId.length-1);
      console.log(indexOfCardInArray);
      console.log(itsThisPlayersTurn);
