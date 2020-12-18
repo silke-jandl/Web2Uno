@@ -1,3 +1,7 @@
 div {
     border: solid red;
 }
+
+.row justify-contents-between{
+    width : 100%;
+}
