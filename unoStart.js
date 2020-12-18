@@ -22,6 +22,7 @@ let topCard;
 let cardArray;
 let itsThisPlayersTurn;
 
+//ich bin nicht kreativ
 document.getElementById('playerNamesForm').addEventListener('submit', function (evt) {
     // console.log("submit")
     evt.preventDefault()
