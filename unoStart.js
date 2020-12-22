@@ -15,16 +15,14 @@ let Card = {
     text: '',
 };
 let wildColor = "";
-let removeCardColor;
-let removeCardValue;
 let img;
 let topCard;
 let cardArray;
 let itsThisPlayersTurn;
 
-//ich bin nicht kreativ
+
 document.getElementById('playerNamesForm').addEventListener('submit', function (evt) {
-    // console.log("submit")
+    // // console.log("submit")
     evt.preventDefault()
     //TODO check if names are the same & there are 4 names
     $('#playerNames').modal('hide')
@@ -83,7 +81,7 @@ function saveNamesFromModalDialog() {
 
 async function startGame(result) {
     gameId = result.Id;
-    //console.log(gameId);
+    //// console.log(gameId);
     newGame.Id = result.Id;
 
     preprarePlayers(result);
@@ -114,7 +112,7 @@ function preprarePlayers(result) {
     newGame.Players = result.Players;
     newGame.NextPlayer = result.NextPlayer;
     currentPlayer = result.NextPlayer;
-    console.log(currentPlayer);
+    // console.log(currentPlayer);
     Player.Player = result.Players.Player;
 
     prepareScoreForPlayers(result);
@@ -130,7 +128,7 @@ function prepareCardsForPlayer(result) {
     handCards.push("handCards3");
     handCards.push("handCards4");
 
-    console.log(handCards);
+    // console.log(handCards);
 
     Card.Color = result.Color;
     Card.Text = result.Text;
@@ -183,7 +181,7 @@ async function getTopCard() {
     if (response.ok) {
         let result = await response.json();
         //alert(JSON.stringify(result))
-        //console.log(result);
+        //// console.log(result);
         topCard = result;
     }
     else {
@@ -203,13 +201,13 @@ async function drawCard() {
         let result = await response.json();
         alert(JSON.stringify(result))
 
-        console.log(currentPlayer + "drawCard");
+        // console.log(currentPlayer + "drawCard");
 
         let karte = document.createElement("div");
         let check = players.indexOf(currentPlayer);
-        console.log(check);
+        // console.log(check);
         let cardArraySize = document.getElementById(handCards[check]).childElementCount;
-        console.log(cardArraySize);
+        // console.log(cardArraySize);
         karte.setAttribute("id", check + "cardToPlay" + cardArraySize);
         karte.setAttribute("onclick", "getIdOfClickedCard(this.id");
         karte.setAttribute("class", "cards");
@@ -222,7 +220,7 @@ async function drawCard() {
         karte.appendChild(img);
 
         // check += 1;
-        //console.log("p" + check + "cards");
+        //// console.log("p" + check + "cards");
         document.getElementById(handCards[check]).appendChild(karte);
 
         let newScore = document.getElementById("score" + (check + 1)).innerText;
@@ -231,8 +229,8 @@ async function drawCard() {
         document.getElementById("score" + (check + 1)).innerText = newScore;
 
         currentPlayer = result.NextPlayer;
-        console.log(currentPlayer + "drawCardNextPlayer");
-        //console.log(currentPlayer);
+        // console.log(currentPlayer + "drawCardNextPlayer");
+        //// console.log(currentPlayer);
         getCards();
     }
     else {
@@ -253,7 +251,7 @@ async function getCards() {
     if (response.ok) {
         let result = await response.json();
         return result;
-        //console.log(result);
+        //// console.log(result);
         //alert(JSON.stringify(result))
         //   cardArray = result.Cards;
         // let getCardsResponse = await getCards()
@@ -271,109 +269,132 @@ function getIdOfClickedCard(clickedId) {
 }
 
 function checkCards(clickedId) {
-
-    //console.log("Blödsinn");
-    console.log(currentPlayer + "checkCards");
-    itsThisPlayersTurn = players.indexOf(currentPlayer);
-    //itsThisPlayersTurn = players.indexOf(currentPlayer);
+    let indexOfCurrentTurnPlayer = players.indexOf(currentPlayer);
     let indexOfCardInArray = clickedId.charAt(clickedId.length - 1);
-    console.log("indexArrayCards", indexOfCardInArray);
-    console.log("Player", itsThisPlayersTurn);
-    alert(itsThisPlayersTurn);
-    if (itsThisPlayersTurn == clickedId.charAt(0)) {
-        alert(clickedId);
-        let removeCard = cardArray.splice(indexOfCardInArray, 1);
-        removeCardColor = removeCard[0].Color;
-        removeCardValue = removeCard[0].Value;
-        //console.log(colorRemoveCard);
-        //console.log(cardArray);
-        let topCardColor = topCard.Color;
-        let topCardValue = topCard.Value;
+    let indexOfPlayer = clickedId.charAt(0);
 
-        if (removeCardColor == "Black" || removeCardValue == topCardValue || removeCardColor == topCardColor) {
-            console.log("Blöd");
-            playCard(clickedId);
+    if (indexOfCurrentTurnPlayer == indexOfPlayer) {
+        let removeCard = getCurrentPlayer(currentPlayer).Cards[indexOfCardInArray];
+
+        console.log(removeCard);
+
+        if (removeCard.Color == "Black" || removeCard.Value == topCard.Value || removeCard.Color == topCard.Color) {
+            playCard(clickedId, removeCard);
+        } else {
+            alert('Falsche Karte!');
         }
+
     } else {
         alert("Falsche Kartenhand!");
-        //console.log(cardArray);
     }
 }
 
-async function playCard(clickedId) {
+async function playCard(clickedId, removeCard) {
 
-    console.log("https://nowaunoweb.azurewebsites.net/api/game/playCard/" + gameId +
-        "?value=" + removeCardValue + "&color=" + removeCardColor + "&wildColor=" + wildColor);
-    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/game/playCard/" + gameId +
-        "?value=" + removeCardValue + "&color=" + removeCardColor + "&wildColor=" + wildColor, {
+    let url = "https://nowaunoweb.azurewebsites.net/api/game/playCard/" + gameId + "?value=" + removeCard.Value + "&color=" + removeCard.Color + "&wildColor=" + wildColor;
+
+    let options = {
         method: "PUT",
         contentType: "application/json",
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
-    });
-
-    if (response.ok) {
-        let result = await response.json();
-        console.log(result);
-        //   alert(JSON.stringify(result));
-
-        if (removeCardColor == "Black") {
-            $('#ChooseColorForm').modal()
-        }
-        console.log("Handkarten", cardArray);
-
-        let cardToDelete = document.getElementById(clickedId);
-        //    console.log(clickedId);
-        cardToDelete.parentElement.removeChild(cardToDelete);
-        console.log("Handkarten2", cardArray);
-        let newTopCard = document.getElementById("topCard");
-        console.log(newTopCard);
-        let parentElement = document.getElementById("handCards" + (itsThisPlayersTurn + 1));
-        while (parentElement.firstChild) {
-            parentElement.removeChild(parentElement.firstChild);
-        }
-        let getCardsResponse = await getCards();
-        cardArray = getCardsResponse.Cards;
-
-
-        for (let j = 0; j < cardArray.length; j++) {
-            let karte = document.createElement("div");
-            karte.setAttribute("id", itsThisPlayersTurn + "cardToPlay" + j);
-            karte.setAttribute("onclick", "getIdOfClickedCard(this.id)");
-            karte.setAttribute("class", "cards");
-            let img = new Image();
-            img.src = "cardImages/" + cardArray[j].Color + cardArray[j].Value + ".png";
-            img.height = 90;
-            karte.appendChild(img);
-            document.getElementById("handCards" + (itsThisPlayersTurn + 1)).appendChild(karte);
-        }
-
-        let newImgTopCard = new Image();
-        newImgTopCard.src = "cardImages/" + removeCardColor + removeCardValue + ".png";
-        newImgTopCard.height = 150;
-        console.log(newImgTopCard);
-
-        document.getElementById("topCard").replaceWith(newImgTopCard);
-        img = newImgTopCard;
-        img.setAttribute("id", "topCard");
-        newImgTopCard.height = 150;
-        console.log(img);
-        console.log(newImgTopCard);
-
-        currentPlayer = result.Player;
-        console.log(currentPlayer);
-        getCards();
-
     }
-    else {
-        alert("HTTP-Error: " + response.status)
+
+    console.log("******* PLAY CARD ***********", {url: url, options: options});
+    
+    let response = await fetch(url, options);
+    let result = await response.json();
+
+    // check if http error
+    if (!response.ok) {
+        showHTTPError(response);
+        return;
     }
+
+    // check if validation error
+    if ('error' in result) {
+        showValidationError(result);
+        return;
+    }
+
+    // everything is ok
+
+    if (removeCard.Color == "Black") {
+        $('#ChooseColorForm').modal()
+    }
+    // console.log("Handkarten", cardArray);
+
+    let cardToDelete = document.getElementById(clickedId);
+    //    // console.log(clickedId);
+    cardToDelete.parentElement.removeChild(cardToDelete);
+    // console.log("Handkarten2", cardArray);
+    let newTopCard = document.getElementById("topCard");
+    // console.log(newTopCard);
+    let parentElement = document.getElementById("handCards" + (itsThisPlayersTurn + 1));
+    while (parentElement.firstChild) {
+        parentElement.removeChild(parentElement.firstChild);
+    }
+    console.log('**************** CURRENT PLAYER 1 ID: ' + currentPlayer);
+    let getCardsResponse = await getCards();
+    cardArray = getCardsResponse.Cards;
+
+
+    for (let j = 0; j < cardArray.length; j++) {
+        let karte = document.createElement("div");
+        karte.setAttribute("id", itsThisPlayersTurn + "cardToPlay" + j);
+        karte.setAttribute("onclick", "getIdOfClickedCard(this.id)");
+        karte.setAttribute("class", "cards");
+        let img = new Image();
+        img.src = "cardImages/" + cardArray[j].Color + cardArray[j].Value + ".png";
+        img.height = 90;
+        karte.appendChild(img);
+        document.getElementById("handCards" + (itsThisPlayersTurn + 1)).appendChild(karte);
+    }
+
+    let newImgTopCard = new Image();
+    newImgTopCard.src = "cardImages/" + removeCard.Color + removeCard.Value + ".png";
+    newImgTopCard.height = 150;
+    // console.log(newImgTopCard);
+
+    document.getElementById("topCard").replaceWith(newImgTopCard);
+    img = newImgTopCard;
+    img.setAttribute("id", "topCard");
+    newImgTopCard.height = 150;
+    // console.log(img);
+    // console.log(newImgTopCard);
+
+    currentPlayer = result.Player;
+
+    console.log('**************** CURRENT PLAYER 2 ID: ' + currentPlayer, result);
+    
+    getCards();
 }
 
+function showValidationError(result) {
+    let message = '';
+    switch (result.error) {
+        case 'IncorrectPlayer': 
+            message = 'Invalid player. Please try again with another person.';
+            break;
+        default:
+            message = "Unexpected error from server. Please contact your server administrator.\n\n(" + result.error + ")";
+            break;
+    }
+
+    alert(message);
+}
+
+function showHTTPError(response) {
+    alert('HTTP-Error: ' + response.status);
+}
+
+function getCurrentPlayer(playerName) {
+    return newGame.Players.filter(p => p.Player = playerName)[0];
+}
 
 document.getElementById('ChooseColorForm').addEventListener('submit', function (evt) {
-    console.log('submit')
+    // console.log('submit')
 
     evt.preventDefault();
 
