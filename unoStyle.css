@@ -5,3 +5,7 @@ div {
 .row justify-contents-between{
     width : 100%;
 }
+
+.hand-card img {
+    width: 90px;
+}
