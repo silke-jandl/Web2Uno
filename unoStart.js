@@ -1,44 +1,12 @@
 "use strict";
 
-//global variables
+let game = {};
+
 let players = ["name1", "name2", "name3", "name4"];
-//let players = [];
-let handCards = [];
-let currentPlayer;
-let gameId;
-let newGame = {};
-let Player = {};
-let Card = {
-    color: '',
-    value: '',
-    score: '',
-    text: '',
-};
-let wildColor = "";
-let img;
-let topCard;
-let cardArray;
-let itsThisPlayersTurn;
-let scores = [];
 
-//make this global? players.indexOf(currentPlayer)
+let topCard123123123;
 
-
-document.getElementById('playerNamesForm').addEventListener('submit', function (evt) {
-    // // console.log("submit")
-    evt.preventDefault()
-    //TODO check if names are the same & there are 4 names
-    $('#playerNames').modal('hide')
-
-    let { name1, name2, name3, name4 } = saveNamesFromModalDialog();
-
-    showNamesOnPlaymat(name1, name2, name3, name4);
-
-    post();
-
-});
-
-async function post() {
+async function startGame() {
     let response = await fetch("https://nowaunoweb.azurewebsites.net/api/game/start", {
         method: "POST",
         body: JSON.stringify(players),
@@ -46,64 +14,45 @@ async function post() {
             "Content-type": "application/json; charset=UTF-8"
         }
     });
-    if (response.ok) {
 
-        let result = await response.json();
-        //alert(JSON.stringify(result));
-
-        startGame(result);
-    }
-    else {
-        showHTTPError(response);
-    }
-}
-
-//$('#playerNames').modal()
-post();
-
-async function getTopCard() {
-    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/game/topCard/" + gameId, {
-        method: "GET",
-        contentType: "application/json",
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
-    });
     if (response.ok) {
         let result = await response.json();
-        topCard = result;
-    }
-    else {
+
+        game = result;
+
+        updatePlayerCards();
+        updateTopCard();
+        highlightCurrentPlayer();
+    } else {
         showHTTPError(response);
     }
 }
 
 async function drawCard() {
-    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/game/drawCard/" + gameId, {
+    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/game/drawCard/" + game.Id, {
         method: "PUT",
         contentType: "application/json",
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
     });
-    if (response.ok) {
-        let result = await response.json();
-        let check = players.indexOf(currentPlayer);
-        
-        putDrawnCardInCurrentPlayersCardArray(check, result);
-        updateScoresAfterCardWasDrwan(check, result);
 
-        currentPlayer = result.NextPlayer;
-        getCards();
-    }
-    else {
+    if (response.ok) {
+        let result = await response.json(),
+            indexOfCurrentPlayer = getIndexOfPlayer(game.NextPlayer);
+
+        await getCards(game.NextPlayer);
+
+        setNextPlayer(result.NextPlayer);
+
+        updatePlayerCards();
+    } else {
         showHTTPError(response);
     }
 }
 
-async function getCards() {
-
-    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/game/getCards/" + gameId + "?playerName=" + currentPlayer, {
+async function getCards(playerName) {
+    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/game/getCards/" + game.Id + "?playerName=" + playerName, {
         method: "GET",
         contentType: "application/json",
         headers: {
@@ -112,34 +61,45 @@ async function getCards() {
     });
 
     if (response.ok) {
-        let result = await response.json();
+        let result = await response.json(),
+            indexOfPlayer = getIndexOfPlayer(playerName);
 
-        // let getCardsResponse = await getCards();
-        // cardArray = getCardsResponse.Cards;
-        // scores = getCardsResponse.Score;
+        game.Players[indexOfPlayer].Cards = result.Cards;
+        game.Players[indexOfPlayer].Score = result.Score;
 
         return result;
-    }
-    else {
+    } else {
         showHTTPError(response);
     }
 }
 
-async function playCard(clickedId, removeCard) {
+async function playCard() {
+    let $clickedCard = $(this),
+        indexOfClickedPlayer = $clickedCard.data('player'),
+        indexOfClickedCard = $clickedCard.data('card'),
+        player = game.Players[indexOfClickedPlayer],
+        card = player.Cards[indexOfClickedCard];
 
-    let url = "https://nowaunoweb.azurewebsites.net/api/game/playCard/" + gameId + "?value=" + removeCard.Value + "&color=" + removeCard.Color + "&wildColor=" + wildColor;
-
-    let options = {
-        method: "PUT",
-        contentType: "application/json",
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
+    // check player
+    if (game.NextPlayer != player.Player) {
+        alert('Falsche Kartenhand!');
+        return;
     }
 
-    console.log("******* PLAY CARD ***********", {url: url, options: options});
-    
-    let response = await fetch(url, options);
+    // check card
+    if (card.Color != "Black" && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
+        alert('Falsche Karte!');
+        return;     
+    }
+
+    let response = await fetch('https://nowaunoweb.azurewebsites.net/api/Game/PlayCard/' + game.Id + '?value=' + card.Value + '&color=' + card.Color + '&wildColor=', {
+        method: 'PUT',
+        contentType: 'application/json',
+        headers: {
+            'Content-Type': 'application/json; Charset=UTF-8'
+        }
+    });
+
     let result = await response.json();
 
     // check if http error
@@ -156,64 +116,40 @@ async function playCard(clickedId, removeCard) {
 
     // everything is ok
 
-    if (removeCard.Color == "Black") {
-        $('#ChooseColorForm').modal()
+    // if (removeCard.Color == "Black") {
+    //     $('#ChooseColorForm').modal();
+    // }
+
+    await reloadPlayerCards();
+
+    game.TopCard = card;
+
+    setNextPlayer(result.Player);
+
+    updatePlayerCards();
+    updateTopCard();
+}
+
+async function reloadPlayerCards() {
+    for (let indexOfPlayer in game.Players) {
+        let player = game.Players[indexOfPlayer];
+
+        await getCards(player.Player);
     }
-
-    let cardToDelete = document.getElementById(clickedId);
-    // console.log(clickedId);
-    cardToDelete.parentElement.removeChild(cardToDelete);
-    // console.log("Handkarten2", cardArray);
-   
-    // console.log(newTopCard);
-    let parentElement = document.getElementById("handCards" + (itsThisPlayersTurn + 1));
-    while (parentElement.firstChild) {
-        parentElement.removeChild(parentElement.firstChild);
-    }
-    console.log('**************** CURRENT PLAYER 1 ID: ' + currentPlayer);
-    let getCardsResponse = await getCards();
-    cardArray = getCardsResponse.Cards;
-
-
-    for (let j = 0; j < cardArray.length; j++) {
-        let karte = document.createElement("div");
-        karte.setAttribute("id", itsThisPlayersTurn + "cardToPlay" + j);
-        karte.setAttribute("onclick", "getIdOfClickedCard(this.id)");
-        karte.setAttribute("class", "cards");
-        let img = new Image();
-        img.src = "cardImages/" + cardArray[j].Color + cardArray[j].Value + ".png";
-        img.height = 90;
-        karte.appendChild(img);
-        document.getElementById("handCards" + (itsThisPlayersTurn + 1)).appendChild(karte);
-    }
-
-    let newImgTopCard = new Image();
-    newImgTopCard.src = "cardImages/" + removeCard.Color + removeCard.Value + ".png";
-    newImgTopCard.height = 150;
-
-    let oldTopCard = document.getElementById("topCard");
-    oldTopCard.replaceWith(newImgTopCard);
-    img = newImgTopCard;
-    img.setAttribute("id", "topCard");
-    img.height = 150;
-
-    currentPlayer = result.Player;
-
-    console.log('**************** CURRENT PLAYER 2 ID: ' + currentPlayer, result);
-    
-    getCards();
 }
 
 function showValidationError(result) {
     let message = '';
+    
     switch (result.error) {
-        case 'IncorrectPlayer': 
+        case 'IncorrectPlayer':
             message = 'Invalid player. Please try again with another person.';
             break;
         default:
             message = "Unexpected error from server. Please contact your server administrator.\n\n(" + result.error + ")";
             break;
     }
+
     alert(message);
 }
 
@@ -221,8 +157,17 @@ function showHTTPError(response) {
     alert('HTTP-Error: ' + response.status);
 }
 
-function getCurrentPlayer(playerName) {
-    return newGame.Players.filter(p => p.Player = playerName)[0];
+function setNextPlayer(playerName) {
+    game.NextPlayer = playerName
+    highlightCurrentPlayer();
+}
+
+function getPlayerNames() {
+    return game.Players.map(p => p.Player);
+}
+
+function getIndexOfPlayer(playerName) {
+    return getPlayerNames().indexOf(playerName);
 }
 
 function showNamesOnPlaymat(name1, name2, name3, name4) {
@@ -244,141 +189,54 @@ function saveNamesFromModalDialog() {
     return { name1, name2, name3, name4 };
 }
 
-async function startGame(result) {
-    gameId = result.Id;
-    //// console.log(gameId);
-    newGame.Id = result.Id;
-
-    preprarePlayers(result);
-    preparePlaymat(result);
-
-    itsThisPlayersTurn = players.indexOf(currentPlayer);
-    //alert(itsThisPlayersTurn);
-
-    let getCardsResponse = await getCards();
-    cardArray = getCardsResponse.Cards;
-    topCard = getTopCard();
+function updateTopCard() {
+    let $topCardImg = document.querySelector('#top-card img')
+    $topCardImg.setAttribute('src', './cardImages/' + game.TopCard.Color + game.TopCard.Value + '.png');
 }
 
-function preparePlaymat(result) {
-    const btnDraw = document.getElementById('drawCard');
-    btnDraw.addEventListener("click", drawCard);
+function updatePlayerCards() {
+    for (let indexOfPlayer in game.Players) {
+        let player = game.Players[indexOfPlayer];
+        let $handCards = $('#hand-cards-' + indexOfPlayer);
 
-    newGame.TopCard = result.TopCard;
-    let startkarte = document.getElementById("ablagestapel");
-    let img = new Image();
-    img.src = "cardImages/" + newGame.TopCard.Color + newGame.TopCard.Value + ".png";
-    img.setAttribute("id", "topCard");
-    startkarte.appendChild(img);
-    startkarte = newGame.TopCard;
-}
+        $handCards.html('');
 
-function preprarePlayers(result) {
-    newGame.Players = result.Players;
-    newGame.NextPlayer = result.NextPlayer;
-    currentPlayer = result.NextPlayer;
-    // console.log(currentPlayer);
-    Player.Player = result.Players.Player;
+        for (let indexOfCard in player.Cards) {
+            let card = player.Cards[indexOfCard],
+                $card = $('<div>'),
+                $cardImage = $('<img>');
 
-    prepareScoreForPlayers(result);
+            $card.attr('class', 'hand-card');
+            $card.attr('data-player', indexOfPlayer);
+            $card.attr('data-card', indexOfCard);
 
-    prepareCardsForPlayer(result);
-}
+            $cardImage.attr('src', '././cardImages/' + card.Color + card.Value + '.png');
 
-function prepareCardsForPlayer(result) {
-    Player.Cards = result.Players.Card;
+            $card.append($cardImage);
 
-    handCards.push("handCards1");
-    handCards.push("handCards2");
-    handCards.push("handCards3");
-    handCards.push("handCards4");
-
-    // console.log(handCards);
-
-    Card.Color = result.Color;
-    Card.Text = result.Text;
-    Card.Value = result.Value;
-    Card.Score = result.Score;
-
-    for (let i = 0; i < handCards.length; i++) {
-        for (let j = 0; j < result.Players[i].Cards.length; j++) {
-            let karte = document.createElement("div");
-            karte.setAttribute("id", i + "cardToPlay" + j);
-            karte.setAttribute("onclick", "getIdOfClickedCard(this.id)");
-            karte.setAttribute("class", "cards");
-            let img = new Image();
-            img.src = "cardImages/" + newGame.Players[i].Cards[j].Color + newGame.Players[i].Cards[j].Value + ".png";
-            img.height = 90;
-            karte.appendChild(img);
-            document.getElementById(handCards[i]).appendChild(karte);
+            $handCards.append($card);
         }
     }
+
+    updateScores();
 }
 
-function prepareScoreForPlayers(result) {
-    Player.Score = result.Players.Score;
-
-    scores.push("score1");
-    scores.push("score2");
-    scores.push("score3");
-    scores.push("score4");
-
-    for (let i = 0; i < scores.length; i++) {
-        let idString = i + 1;
-        document.getElementById("score" + idString);
-        let score = document.createElement("p");
-        score.innerText = result.Players[i].Score;
-        score.setAttribute("class", "scoreStyle");
-
-        document.getElementById(scores[i]).appendChild(score);
+function updateScores() {
+    for (let indexOfPlayer in game.Players) {
+        let player = game.Players[indexOfPlayer];
+        let $score = document.querySelector('#score-' + indexOfPlayer);
+        
+        $score.innerText = player.Score;
     }
 }
 
-function updateScoresAfterCardWasDrwan(check, result) {
-    let newScore = document.getElementById("score" + (check + 1)).innerText;
-    newScore = parseInt(newScore);
-    newScore += result.Card.Score;
-    document.getElementById("score" + (check + 1)).innerText = newScore;
-}
+function highlightCurrentPlayer() {
+    let indexOfPlayer = getIndexOfPlayer(game.NextPlayer),
+        $playerName = $('#player-' + indexOfPlayer);
 
-function putDrawnCardInCurrentPlayersCardArray(check, result) {
-    let karte = document.createElement("div");
-    let cardArraySize = document.getElementById(handCards[check]).childElementCount;
-    karte.setAttribute("id", check + "cardToPlay" + cardArraySize);
-    karte.setAttribute("onclick", "getIdOfClickedCard(this.id");
-    karte.setAttribute("class", "cards");
-    let img = new Image();
-    img.src = "cardImages/" + result.Card.Color + result.Card.Value + ".png";
-    img.height = 90;
-    karte.value = result.Card.Value;
-    karte.color = result.Card.Color;
-    karte.appendChild(img);
-    document.getElementById(handCards[check]).appendChild(karte);
-}
+    $('.player').css('font-weight', 'normal');
 
-function getIdOfClickedCard(clickedId) {
-    checkCards(clickedId);
-}
-
-function checkCards(clickedId) {
-    let indexOfCurrentTurnPlayer = players.indexOf(currentPlayer);
-    let indexOfCardInArray = clickedId.charAt(clickedId.length - 1);
-    let indexOfPlayer = clickedId.charAt(0);
-
-    if (indexOfCurrentTurnPlayer == indexOfPlayer) {
-        let removeCard = getCurrentPlayer(currentPlayer).Cards[indexOfCardInArray];
-
-        //console.log(removeCard);
-
-        if (removeCard.Color == "Black" || removeCard.Value == topCard.Value || removeCard.Color == topCard.Color) {
-            playCard(clickedId, removeCard);
-        } else {
-            alert('Falsche Karte!');
-        }
-
-    } else {
-        alert("Falsche Kartenhand!");
-    }
+    $playerName.css('font-weight', 'bold');
 }
 
 document.getElementById('ChooseColorForm').addEventListener('submit', function (evt) {
@@ -387,14 +245,36 @@ document.getElementById('ChooseColorForm').addEventListener('submit', function (
     evt.preventDefault();
 
     document.getElementById('red').value;
-    topCard.Color = "Red";
+    topCard123123123.Color = "Red";
 
     document.getElementById('blue').value;
-    topCard.Color = "Blue";
+    topCard123123123.Color = "Blue";
 
     document.getElementById('green').value;
-    topCard.Color = "Green";
+    topCard123123123.Color = "Green";
 
     document.getElementById('yellow').value;
-    topCard.Color = "Yellow";
+    topCard123123123.Color = "Yellow";
 });
+
+document.getElementById('playerNamesForm').addEventListener('submit', function (evt) {
+    // // console.log("submit")
+    evt.preventDefault();
+    //TODO check if names are the same & there are 4 names
+    $('#playerNames').modal('hide');
+
+    let { name1, name2, name3, name4 } = saveNamesFromModalDialog();
+
+    showNamesOnPlaymat(name1, name2, name3, name4);
+
+    startGame();
+
+});
+
+$('#draw-card img').on('click', drawCard);
+
+$(document).on('click', '.hand-card', playCard);
+
+// $('#playerNames').modal()
+
+startGame();
