@@ -6,10 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Leo & Silke's mean uno game</title>
   <link rel="stylesheet" href="./unoStyle.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
 
 <body>
+
   <div class="container-fluid">
     <div class="row playmat">
       <div class="row justify-content-between">
@@ -30,97 +32,70 @@
         </div>
       </div>
       <div class="row justify-content-center">
-<br>
+        <br>
 
-<div class="container playground">
-<div class="row">
-    <div id="top-card" class="col-3" style="width: 100%;">
-        <p>Ablagestapel</p>
-        <img src="./cardImages/back0.png" alt="" />
-    </div>
-    <div id="draw-card" class="col-3", style="width: 100%;">
-        <p>Abnahmestapel</p>
-        <img src="./cardImages/back0.png" />
-    </div>
-</div>
-</div>
-
-<div class="row justify-content-between">
-  <!--PLAYER 3 Left corner down-->
-  <div class="col-6 align-self-start">
-    <br>
-    <p class="player" id="player-2">Player 3</p>
-    <div class="points" id="score-2"></div>
-    <div class="d-flex flex-row" id="hand-cards-2"></div>
-
-    <br>
-  </div>
-  <!--
-    ND Player 3-->
-  <!--PLAYER 4 Right corner down-->
-  <div class="col-6 align-self-end">
-    <br>
-    <p class="player" id="player-3">Player 4</p>
-    <div class="points" id="score-3"></div>
-    <div class="d-flex flex-row" id="hand-cards-3"></div>
-
-    <br>
-  </div>
-  <!--END Player 4-->
-</div>
-</div>
-
-  <div class="modal fade" id="playerNames" tabindex="-1" role="dialog"
-  data-keyboard="false" data-backdrop="static">
-  <form id="playerNamesForm">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Überschrift</h5>   
-          </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <input type="text" class="form-control" id="player1"
-                placeholder="Enter player name 1"></input>
-                <input type="text" class="form-control" id="player2"
-                placeholder="Enter player name 2"></input>
-                <input type="text" class="form-control" id="player3"
-                placeholder="Enter player name 3"></input>
-                <input type="text" class="form-control" id="player4"
-                placeholder="Enter player name 4"></input>
+        <div class="container playground">
+          <div class="row">
+            <div id="top-card" class="col-3" style="width: 100%;">
+              <p>Ablagestapel</p>
+              <img src="./cardImages/back0.png" alt="" />
+            </div>
+            <div id="draw-card" class="col-3" style="width: 100%;">
+              <p>Abnahmestapel</p>
+              <img src="./cardImages/back0.png" alt="" />
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary"
-            id="playerNamesSubmitButton">Start game</button>
+        </div>
+
+        <div class="row justify-content-between">
+          <!--PLAYER 3 Left corner down-->
+          <div class="col-6 align-self-start">
+            <br>
+            <p class="player" id="player-2">Player 3</p>
+            <div class="points" id="score-2"></div>
+            <div class="d-flex flex-row" id="hand-cards-2"></div>
+
+            <br>
           </div>
+          <!--
+    ND Player 3-->
+          <!--PLAYER 4 Right corner down-->
+          <div class="col-6 align-self-end">
+            <br>
+            <p class="player" id="player-3">Player 4</p>
+            <div class="points" id="score-3"></div>
+            <div class="d-flex flex-row" id="hand-cards-3"></div>
+
+            <br>
+          </div>
+          <!--END Player 4-->
         </div>
       </div>
-  </form>   
+    </div>
   </div>
 
-  <div class="ChooseColorModalDialog">
-    <div class="modal fade" id="wildcolor" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-      <form id="ChooseColorForm">
+  <div class="playerNamesModDia">
+    <div class="modal fade" id="playerNames" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+      <form id="playerNamesForm">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Players:</h5>
             </div>
-            <div class="modal-body" id="chooseColor">
+            <div class="modal-body">
               <div class="form-group">
-                <button type="submit" class="form-control" id="red">red</button>
-                </br>
-                <input type="submit" class="form-control" id="blue">blue</button>
-                </br>
-                <input type="submit" class="form-control" id="green">green</button>
-                </br>
-                <input type="submit" class="form-control" id="yellow">yellow</button>
-                </br>
+                <input type="text" class="form-control" id="player1" placeholder="Please type in a name"/>
+                <br>
+                <input type="text" class="form-control" id="player2" placeholder="Please type in a name"/>
+                <br>
+                <input type="text" class="form-control" id="player3" placeholder="Please type in a name"/>
+                <br>
+                <input type="text" class="form-control" id="player4" placeholder="Please type in a name"/>
+                <br>
               </div>
             </div>
             <div class="modal-footer">
-
+              <button type="submit" class="btn btn-primary" id="playerNamesSubmit">Start playing</button>
             </div>
           </div>
         </div>
@@ -128,9 +103,30 @@
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-  <script src="./unoStart.js"></script>
+  <div class="modal fade" id="chooseColor" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Choose a color</h5>
+        </div>
+        <div class="row modal-body justify-content-around">
+          <button type="submit" class="btn btn-lg btn-outline-danger" id="red">Red</button>
+          <button type="submit" class="btn btn-lg btn-outline-warning" id="yellow">Yellow</button>
+          <button type="submit" class="btn btn-lg btn-outline-success" id="green">Green</button>
+          <button type="submit" class="btn btn-lg btn-outline-primary" id="blue">Blue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"></script>
+    <script src="./unoStart.js"></script>
 
 </body>
+
 </html>

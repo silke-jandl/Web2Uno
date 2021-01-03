@@ -4,10 +4,11 @@ let game = {};
 
 let players = ["name1", "name2", "name3", "name4"];
 
-let topCard123123123;
+//let wildcolor;
+
 
 async function startGame() {
-    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/game/start", {
+    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/Game/Start", {
         method: "POST",
         body: JSON.stringify(players),
         headers: {
@@ -21,7 +22,9 @@ async function startGame() {
         game = result;
 
         updatePlayerCards();
-        updateTopCard();
+        //updateTopCard();
+        let $topCardImg = document.querySelector('#top-card img');
+        $topCardImg.setAttribute('src', './cardImages/' + game.TopCard.Color + game.TopCard.Value + '.png');
         highlightCurrentPlayer();
     } else {
         showHTTPError(response);
@@ -29,7 +32,7 @@ async function startGame() {
 }
 
 async function drawCard() {
-    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/game/drawCard/" + game.Id, {
+    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/Game/DrawCard/" + game.Id, {
         method: "PUT",
         contentType: "application/json",
         headers: {
@@ -38,14 +41,14 @@ async function drawCard() {
     });
 
     if (response.ok) {
-        let result = await response.json(),
-            indexOfCurrentPlayer = getIndexOfPlayer(game.NextPlayer);
+        let result = await response.json();
+         //   , indexOfCurrentPlayer = getIndexOfPlayer(game.NextPlayer);
 
         await getCards(game.NextPlayer);
 
         setNextPlayer(result.NextPlayer);
-
         updatePlayerCards();
+
     } else {
         showHTTPError(response);
     }
@@ -73,6 +76,23 @@ async function getCards(playerName) {
     }
 }
 
+async function getTopCard() {
+    let response = await fetch("https://nowaunoweb.azurewebsites.net/api/Game/TopCard/" + game.Id, {
+        method: "GET",
+        contentType: "application/json",
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    });
+
+    if (response.ok) {
+        let result = await response.json();
+        return result;
+    } else {
+        showHTTPError(response);
+    }
+}
+
 async function playCard() {
     let $clickedCard = $(this),
         indexOfClickedPlayer = $clickedCard.data('player'),
@@ -80,19 +100,38 @@ async function playCard() {
         player = game.Players[indexOfClickedPlayer],
         card = player.Cards[indexOfClickedCard];
 
+    let wildcolor = 'sth';
+
+    console.log(card);
+
     // check player
     if (game.NextPlayer != player.Player) {
         alert('Falsche Kartenhand!');
         return;
     }
+    // if (game.TopCard.Color == 'Black') {
+    //     // if (card.Color != wildcolor) {
+    //     //     alert("Color to be played ", wildcolor);
+    //     //     console.log(wildcolor);
+    //     //     return;
+    //     // }
+
+    // }
 
     // check card
-    if (card.Color != "Black" && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
+    if (card.Color != 'Black' && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
         alert('Falsche Karte!');
-        return;     
+        return;
     }
 
-    let response = await fetch('https://nowaunoweb.azurewebsites.net/api/Game/PlayCard/' + game.Id + '?value=' + card.Value + '&color=' + card.Color + '&wildColor=', {
+    if (card.Color == 'Black') {
+         //$('#chooseColor').modal();
+
+        wildcolor = await getChosenColorFromModal();
+        console.log(wildcolor);
+    }
+
+    let response = await fetch('https://nowaunoweb.azurewebsites.net/api/Game/PlayCard/' + game.Id + '?value=' + card.Value + '&color=' + card.Color + '&wildColor=' + wildcolor, {
         method: 'PUT',
         contentType: 'application/json',
         headers: {
@@ -112,25 +151,63 @@ async function playCard() {
     if ('error' in result) {
         showValidationError(result);
         return;
+
     }
 
     // everything is ok
 
-    // if (removeCard.Color == "Black") {
-    //     $('#ChooseColorForm').modal();
+    // if (card.Color == 'Black'){
+    // alert("choose color");
+
+    // chooseColor();
     // }
 
-    await reloadPlayerCards();
 
+    await reloadAllPlayerCards();
     game.TopCard = card;
-
     setNextPlayer(result.Player);
-
     updatePlayerCards();
     updateTopCard();
 }
 
-async function reloadPlayerCards() {
+
+async function getChosenColorFromModal() {
+    $('#chooseColor').modal();
+    let chosenColor;
+
+    $('#red').on('click', function () {
+        chosenColor = 'Red';
+        $('#chooseColor').modal('hide');
+        getTopCard.Color = chosenColor;
+        return chosenColor;
+
+    });
+
+    $('#yellow').on('click', function () {
+        chosenColor = 'Yellow';
+        $('#chooseColor').modal('hide');
+        getTopCard.Color = chosenColor;
+        return chosenColor;
+
+    });
+
+    $('#green').on('click', function () {
+        chosenColor = 'Green';
+        $('#chooseColor').modal('hide');
+        getTopCard.Color = chosenColor;
+        return chosenColor;
+
+    });
+
+    $('#blue').on('click', function () {
+        chosenColor = 'Blue';
+        $('#chooseColor').modal('hide');
+        getTopCard.Color = chosenColor;
+        return chosenColor;
+    });
+}
+
+async function reloadAllPlayerCards() {
     for (let indexOfPlayer in game.Players) {
         let player = game.Players[indexOfPlayer];
 
@@ -140,13 +217,13 @@ async function reloadPlayerCards() {
 
 function showValidationError(result) {
     let message = '';
-    
+
     switch (result.error) {
         case 'IncorrectPlayer':
-            message = 'Invalid player. Please try again with another person.';
+            message = 'Oh come on, let the person play whose turn it is!';
             break;
         default:
-            message = "Unexpected error from server. Please contact your server administrator.\n\n(" + result.error + ")";
+            message = "There, you've done it, you broke the game...\n\n(" + result.error + ")";
             break;
     }
 
@@ -158,7 +235,7 @@ function showHTTPError(response) {
 }
 
 function setNextPlayer(playerName) {
-    game.NextPlayer = playerName
+    game.NextPlayer = playerName;
     highlightCurrentPlayer();
 }
 
@@ -190,8 +267,10 @@ function saveNamesFromModalDialog() {
 }
 
 function updateTopCard() {
-    let $topCardImg = document.querySelector('#top-card img')
+    getTopCard();
+    let $topCardImg = document.querySelector('#top-card img');
     $topCardImg.setAttribute('src', './cardImages/' + game.TopCard.Color + game.TopCard.Value + '.png');
+    console.log(game.TopCard);
 }
 
 function updatePlayerCards() {
@@ -217,7 +296,6 @@ function updatePlayerCards() {
             $handCards.append($card);
         }
     }
-
     updateScores();
 }
 
@@ -225,7 +303,7 @@ function updateScores() {
     for (let indexOfPlayer in game.Players) {
         let player = game.Players[indexOfPlayer];
         let $score = document.querySelector('#score-' + indexOfPlayer);
-        
+
         $score.innerText = player.Score;
     }
 }
@@ -234,28 +312,11 @@ function highlightCurrentPlayer() {
     let indexOfPlayer = getIndexOfPlayer(game.NextPlayer),
         $playerName = $('#player-' + indexOfPlayer);
 
-    $('.player').css('font-weight', 'normal');
+    $('.player').css('font-weight', 'normal'); +
 
-    $playerName.css('font-weight', 'bold');
+        $playerName.css('font-weight', 'bold');
 }
 
-document.getElementById('ChooseColorForm').addEventListener('submit', function (evt) {
-    // console.log('submit')
-
-    evt.preventDefault();
-
-    document.getElementById('red').value;
-    topCard123123123.Color = "Red";
-
-    document.getElementById('blue').value;
-    topCard123123123.Color = "Blue";
-
-    document.getElementById('green').value;
-    topCard123123123.Color = "Green";
-
-    document.getElementById('yellow').value;
-    topCard123123123.Color = "Yellow";
-});
 
 document.getElementById('playerNamesForm').addEventListener('submit', function (evt) {
     // // console.log("submit")
@@ -268,13 +329,20 @@ document.getElementById('playerNamesForm').addEventListener('submit', function (
     showNamesOnPlaymat(name1, name2, name3, name4);
 
     startGame();
-
 });
 
 $('#draw-card img').on('click', drawCard);
 
 $(document).on('click', '.hand-card', playCard);
 
-// $('#playerNames').modal()
+// $('ChooseColorForm').on('submit', function (evt) {
+//     evt.preventDefault();
+//     $('#ChooseColorForm').modal('hide');
+// });
+
+
+
+// $('#playerNames').modal();
 
 startGame();
+
