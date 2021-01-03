@@ -4,7 +4,7 @@ let game = {};
 
 let players = ["name1", "name2", "name3", "name4"];
 
-//let wildcolor;
+let wildcolor = "Blue";
 
 
 async function startGame() {
@@ -42,9 +42,11 @@ async function drawCard() {
 
     if (response.ok) {
         let result = await response.json();
-         //   , indexOfCurrentPlayer = getIndexOfPlayer(game.NextPlayer);
+        //   , indexOfCurrentPlayer = getIndexOfPlayer(game.NextPlayer);
 
         await getCards(game.NextPlayer);
+
+        //$('#draw-card img').classList.add("flip-vertical-right");
 
         setNextPlayer(result.NextPlayer);
         updatePlayerCards();
@@ -100,36 +102,42 @@ async function playCard() {
         player = game.Players[indexOfClickedPlayer],
         card = player.Cards[indexOfClickedCard];
 
-    let wildcolor = 'sth';
+    // // let wildcolor = 'sth';
+    // //console.log(wildcolor);
 
-    console.log(card);
+    // console.log(card);
 
-    // check player
-    if (game.NextPlayer != player.Player) {
-        alert('Falsche Kartenhand!');
-        return;
-    }
-    // if (game.TopCard.Color == 'Black') {
-    //     // if (card.Color != wildcolor) {
-    //     //     alert("Color to be played ", wildcolor);
-    //     //     console.log(wildcolor);
-    //     //     return;
-    //     // }
+    // // check player
+    // if (game.NextPlayer != player.Player) {
+    //     alert('Falsche Kartenhand!');
+    //     return;
+    // }
+    // // if (game.TopCard.Color == 'Black') {
+    // //     // if (card.Color != wildcolor) {
+    // //     //     alert("Color to be played ", wildcolor);
+    // //     //     console.log(wildcolor);
+    // //     //     return;
+    // //     // }
 
+    // // }
+
+    // // check card
+    // if (card.Color != 'Black' && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
+    //     //alert('Falsche Karte!');
+    //     $clickedCard.addClass("flip-vertical-right");
+    //     return;
     // }
 
-    // check card
-    if (card.Color != 'Black' && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
-        alert('Falsche Karte!');
-        return;
-    }
+    // if (card.Color == 'Black') {
+    //     $('#chooseColor').modal();
 
-    if (card.Color == 'Black') {
-         //$('#chooseColor').modal();
+    //     wildcolor = await getChosenColorFromModal();
+    //     console.log(wildcolor);
+    // }
 
-        wildcolor = await getChosenColorFromModal();
-        console.log(wildcolor);
-    }
+    checkIfCardCanBePlayed($clickedCard, player);
+    
+    console.log(wildcolor);
 
     let response = await fetch('https://nowaunoweb.azurewebsites.net/api/Game/PlayCard/' + game.Id + '?value=' + card.Value + '&color=' + card.Color + '&wildColor=' + wildcolor, {
         method: 'PUT',
@@ -151,23 +159,50 @@ async function playCard() {
     if ('error' in result) {
         showValidationError(result);
         return;
-
     }
 
     // everything is ok
 
-    // if (card.Color == 'Black'){
-    // alert("choose color");
-
-    // chooseColor();
-    // }
-
+    $clickedCard.addClass("bounce-out-top");
 
     await reloadAllPlayerCards();
     game.TopCard = card;
     setNextPlayer(result.Player);
     updatePlayerCards();
     updateTopCard();
+}
+
+async function checkIfCardCanBePlayed(card, player) {
+
+    let wildcolor = '';
+    console.log(card);
+
+    if (game.NextPlayer != player.Player) {
+        //alert('These aren\'t your cards, now, are they?');
+        card.addClass("shake-horizontal").removeClass("shake-horizontal");
+        return;
+    }
+
+    if (card.Color != 'Black' && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
+        //alert('Falsche Karte!');
+        card.addClass("shake-horizontal");
+        card.removeClass("shake-horizontal");
+        return;
+    }
+
+    if (card.Color == 'Black') {
+        wildcolor = getChosenColorFromModal();
+        return wildcolor;
+        // wildcolor = await getChosenColorFromModal();
+        // console.log(wildcolor);
+    }
+
+    if (game.TopCard.Color == 'Black') {
+        if (card.Color != wildcolor) {
+            alert("Color to be played ", wildcolor);
+            return;
+        }
+    }
 }
 
 
@@ -180,7 +215,6 @@ async function getChosenColorFromModal() {
         $('#chooseColor').modal('hide');
         getTopCard.Color = chosenColor;
         return chosenColor;
-
     });
 
     $('#yellow').on('click', function () {
@@ -188,7 +222,6 @@ async function getChosenColorFromModal() {
         $('#chooseColor').modal('hide');
         getTopCard.Color = chosenColor;
         return chosenColor;
-
     });
 
     $('#green').on('click', function () {
@@ -196,7 +229,6 @@ async function getChosenColorFromModal() {
         $('#chooseColor').modal('hide');
         getTopCard.Color = chosenColor;
         return chosenColor;
-
     });
 
     $('#blue').on('click', function () {
@@ -335,12 +367,13 @@ $('#draw-card img').on('click', drawCard);
 
 $(document).on('click', '.hand-card', playCard);
 
-// $('ChooseColorForm').on('submit', function (evt) {
-//     evt.preventDefault();
-//     $('#ChooseColorForm').modal('hide');
-// });
-
-
+$('ChooseColorForm').on('submit', function (evt) {
+    evt.preventDefault();
+    playCard();
+    $('#ChooseColorForm').modal('hide');
+    return getChosenColorFromModal();
+    //playCard();
+});
 
 // $('#playerNames').modal();
 
