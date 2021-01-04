@@ -2,10 +2,8 @@
 
 let game = {};
 
-//let players = ["name1", "name2", "name3", "name4"];
-let players = [];
-
-let wildcolor = "Blue";
+let players = ["name1", "name2", "name3", "name4"];
+//let players = [];
 
 
 async function startGame() {
@@ -100,65 +98,10 @@ async function getTopCard() {
     }
 }
 
-async function playCard() {
-    let $clickedCard = $(this),
-        indexOfClickedPlayer = $clickedCard.data('player'),
-        indexOfClickedCard = $clickedCard.data('card'),
-        player = game.Players[indexOfClickedPlayer],
-        card = player.Cards[indexOfClickedCard];
-
-    // // let wildcolor = 'sth';
-    // //console.log(wildcolor);
-
-    // console.log(card);
-
-    // // check player
-    // if (game.NextPlayer != player.Player) {
-    //     alert('Falsche Kartenhand!');
-    //     return;
-    // }
-    // // if (game.TopCard.Color == 'Black') {
-    // //     // if (card.Color != wildcolor) {
-    // //     //     alert("Color to be played ", wildcolor);
-    // //     //     console.log(wildcolor);
-    // //     //     return;
-    // //     // }
-
-    // // }
-
-    // // check card
-    // if (card.Color != 'Black' && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
-    //     //alert('Falsche Karte!');
-    //     $clickedCard.addClass("flip-vertical-right");
-    //     return;
-    // }
-
-    // if (card.Color == 'Black') {
-    //     $('#chooseColor').modal();
-
-    //     wildcolor = await getChosenColorFromModal();
-    //     console.log(wildcolor);
-    // }
-
-    checkIfCardCanBePlayed($clickedCard, player);
-
-    if (card.Color == 'Black') {
-        $('#chooseColor').modal();
-        //wildcolor = chosenColor;        
-        wildcolor = await getChosenColorFromModal();
-        //return wildcolor;
-
-        console.log(wildcolor, 'inside of black condition');
-    }
+async function playCard(wildcolor, card) {
 
     console.log(wildcolor);
-
-    if (game.TopCard.Color == 'Black') {
-        if (card.Color != wildcolor) {
-            alert("Color to be played ", wildcolor);
-            return;
-        }
-    }
+    // getTopCard.Color = wildcolor;
 
     let response = await fetch('https://nowaunoweb.azurewebsites.net/api/Game/PlayCard/' + game.Id + '?value=' + card.Value + '&color=' + card.Color + '&wildColor=' + wildcolor, {
         method: 'PUT',
@@ -184,64 +127,46 @@ async function playCard() {
 
     // everything is ok
 
-    $clickedCard.addClass("bounce-out-top");
+    //card.classList.add("bounce-out-top");
 
     await reloadAllPlayerCards();
     game.TopCard = card;
+    if(game.TopCard.Color == 'Black'){
+        game.TopCard.Color = wildcolor;
+    }
     setNextPlayer(result.Player);
     updatePlayerCards();
     updateTopCard();
 }
 
-async function checkIfCardCanBePlayed(card, player) {
-
-    if (game.NextPlayer != player.Player) {
-        //alert('These aren\'t your cards, now, are they?');
-        card.addClass("shake-horizontal").removeClass("shake-horizontal");
-        return;
-    }
-
-    if (card.Color != 'Black' && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
-        //alert('Falsche Karte!');
-        card.addClass("shake-horizontal");
-        card.removeClass("shake-horizontal");
-        return;
-    }
-}
-
-async function getChosenColorFromModal() {
-    // let chosenColor;
+async function getChosenColorFromModal(card) {
 
     $('#red').on('click', function () {
-        // let valueR = $('#red').val();
-        // $('top-card').val(valueR);
-        // $('#chooseColor').modal('hide');
-
         let chosenColor = 'Red';
         $('#chooseColor').modal('hide');
         getTopCard.Color = chosenColor;
-        return chosenColor;
+        playCard(chosenColor, card);
     });
 
     $('#yellow').on('click', function () {
         let chosenColor = 'Yellow';
         $('#chooseColor').modal('hide');
         game.TopCard.Color = chosenColor;
-        return chosenColor;
+        playCard(chosenColor, card);
     });
 
     $('#green').on('click', function () {
         let chosenColor = 'Green';
         $('#chooseColor').modal('hide');
         getTopCard.Color = chosenColor;
-        return chosenColor;
+        playCard(chosenColor, card);
     });
 
     $('#blue').on('click', function () {
         let chosenColor = 'Blue';
         $('#chooseColor').modal('hide');
         getTopCard.Color = chosenColor;
-        return chosenColor;
+        playCard(chosenColor, card);
     });
 }
 
@@ -377,19 +302,40 @@ document.getElementById('playerNamesForm').addEventListener('submit', function (
 
 $('#draw-card img').on('click', drawCard);
 
-$(document).on('click', '.hand-card', playCard);
+$(document).on('click', '.hand-card', function () {
+    let $clickedCard = $(this),
+        indexOfClickedPlayer = $clickedCard.data('player'),
+        indexOfClickedCard = $clickedCard.data('card'),
+        player = game.Players[indexOfClickedPlayer],
+        card = player.Cards[indexOfClickedCard];
 
-$('ChooseColorForm').on('submit', function (evt) {
-    //evt.preventDefault();
-    playCard();
-    $('#ChooseColorForm').modal('hide');
-    return getChosenColorFromModal();
-    //playCard();
+        if (game.NextPlayer != player.Player) {
+            //alert('These aren\'t your cards, now, are they?');
+            $clickedCard.addClass(".shake-horizontal");
+            //.removeClass("shake-horizontal");
+            return;
+        }
+    
+        if (card.Color != 'Black' && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
+            alert('Falsche Karte!');
+            $clickedCard.addClass("shake-horizontal");
+            $clickedCard.removeClass("shake-horizontal");
+            return;
+        }
+    
+        if (card.Color == 'Black') {
+            $('#chooseColor').modal();
+            getChosenColorFromModal(card);
+        }
+
+        if (card.Value == game.TopCard.Value || card.Color == game.TopCard.Color){
+            let wildcolor = "";
+            playCard(wildcolor, card);
+        }
+
 });
 
-$('#playerNames').modal();
+//$('#playerNames').modal();
 
-//object in dem ich farbe speichere und dannim modalen aufruf mit übergeben (nach/statt hide)
-
-//startGame();
+startGame();
 

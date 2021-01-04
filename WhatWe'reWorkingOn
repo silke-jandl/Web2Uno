@@ -2,7 +2,7 @@ Anforderungen – UNO – WEB II – 2020
 
 Nr.	Anforderung – Das Unosystem …	Status	Hinweise
 	
-2	muss gleiche SpierlerInnen Namen verhindern.		
+2			
 3
 4	                                 	
 	
@@ -18,8 +18,8 @@ Nr.	Anforderung – Das Unosystem …	Status	Hinweise
 15	
 16			
 17	muss das Spiel beenden und SiegerIn visualisieren, wenn eine Person keine Karten mehr besitzt.		
-18	muss die Wahl einer Farbe erlauben, wenn eine Uno Sonderkarte gespielt wurde.		
-19	muss die gewählte Farbe nach einer Farbwahl visualisieren.		
+18		
+19			
 20			
 21	soll nett aussehen 		
 Alle weiteren Anforderungen sind KANN und sollten erst danach umgesetzt werden:
