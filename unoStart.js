@@ -246,9 +246,14 @@ function updatePlayerCards() {
 function updateScores() {
     for (let indexOfPlayer in game.Players) {
         let player = game.Players[indexOfPlayer];
-        let $score = document.querySelector('#score-' + indexOfPlayer);
+        let $score = $('#score-' + indexOfPlayer);
 
         $score.innerText = player.Score;
+
+        if(player.Cards.length == 0){
+            alert("Congratulations, you won at a game my 2-year-old niece can win at");
+            // $score.addClass('roll-out-right');
+        }
     }
 }
 
@@ -312,14 +317,12 @@ $(document).on('click', '.hand-card', function () {
         if (game.NextPlayer != player.Player) {
             //alert('These aren\'t your cards, now, are they?');
             $clickedCard.addClass(".shake-horizontal");
-            //.removeClass("shake-horizontal");
             return;
         }
     
         if (card.Color != 'Black' && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
             alert('Falsche Karte!');
             $clickedCard.addClass("shake-horizontal");
-            $clickedCard.removeClass("shake-horizontal");
             return;
         }
     
@@ -330,6 +333,7 @@ $(document).on('click', '.hand-card', function () {
 
         if (card.Value == game.TopCard.Value || card.Color == game.TopCard.Color){
             let wildcolor = "";
+            $clickedCard.addClass("bounce-out-top");
             playCard(wildcolor, card);
         }
 
