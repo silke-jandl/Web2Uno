@@ -2,7 +2,8 @@
 
 let game = {};
 
-let players = ["name1", "name2", "name3", "name4"];
+//let players = ["name1", "name2", "name3", "name4"];
+let players = [];
 
 let wildcolor = "Blue";
 
@@ -32,6 +33,7 @@ async function startGame() {
 }
 
 async function drawCard() {
+    let $drawcard = $(this);
     let response = await fetch("https://nowaunoweb.azurewebsites.net/api/Game/DrawCard/" + game.Id, {
         method: "PUT",
         contentType: "application/json",
@@ -44,12 +46,15 @@ async function drawCard() {
         let result = await response.json();
         //   , indexOfCurrentPlayer = getIndexOfPlayer(game.NextPlayer);
 
-        await getCards(game.NextPlayer);
+        $drawcard.addClass("ping");
 
-        //$('#draw-card img').classList.add("flip-vertical-right");
+
+        await getCards(game.NextPlayer);
 
         setNextPlayer(result.NextPlayer);
         updatePlayerCards();
+
+        $drawcard.removeClass("ping");
 
     } else {
         showHTTPError(response);
@@ -143,7 +148,7 @@ async function playCard() {
         wildcolor = await getChosenColorFromModal();
         //return wildcolor;
 
-        console.log(wildcolor, 'inside if black condition');
+        console.log(wildcolor, 'inside of black condition');
     }
 
     console.log(wildcolor);
@@ -154,8 +159,6 @@ async function playCard() {
             return;
         }
     }
-
-
 
     let response = await fetch('https://nowaunoweb.azurewebsites.net/api/Game/PlayCard/' + game.Id + '?value=' + card.Value + '&color=' + card.Color + '&wildColor=' + wildcolor, {
         method: 'PUT',
@@ -282,25 +285,6 @@ function getIndexOfPlayer(playerName) {
     return getPlayerNames().indexOf(playerName);
 }
 
-function showNamesOnPlaymat(name1, name2, name3, name4) {
-    document.getElementById("player1name").textContent = name1;
-    document.getElementById("player2name").textContent = name2;
-    document.getElementById("player3name").textContent = name3;
-    document.getElementById("player4name").textContent = name4;
-}
-
-function saveNamesFromModalDialog() {
-    let name1 = document.getElementById("player1").value;
-    let name2 = document.getElementById("player2").value;
-    let name3 = document.getElementById("player3").value;
-    let name4 = document.getElementById("player4").value;
-    players.push(name1);
-    players.push(name2);
-    players.push(name3);
-    players.push(name4);
-    return { name1, name2, name3, name4 };
-}
-
 function updateTopCard() {
     getTopCard();
     let $topCardImg = document.querySelector('#top-card img');
@@ -352,6 +336,31 @@ function highlightCurrentPlayer() {
         $playerName.css('font-weight', 'bold');
 }
 
+function showNamesOnPlaymat(name1, name2, name3, name4) {
+    document.getElementById("player-0").textContent = name1;
+    document.getElementById("player-1").textContent = name2;
+    document.getElementById("player-2").textContent = name3;
+    document.getElementById("player-3").textContent = name4;
+}
+
+function saveNamesFromModalDialog() {
+    let name1 = document.getElementById("player1").value;
+    let name2 = document.getElementById("player2").value;
+    let name3 = document.getElementById("player3").value;
+    let name4 = document.getElementById("player4").value;
+
+    if (name1 != name2 && name1 != name3 && name1 != name4 && name2 != name3 && name2 != name4 && name3 != name4) {
+        players.push(name1);
+        players.push(name2);
+        players.push(name3);
+        players.push(name4);
+    } else {
+        alert("One player, one unique name, that's how we're playing here. If that's already to hard for you, maybe this game is not for you... If you dare, though, refresh the page and try again.");
+        return;
+    }
+    return { name1, name2, name3, name4 };
+}
+
 
 document.getElementById('playerNamesForm').addEventListener('submit', function (evt) {
     // // console.log("submit")
@@ -371,16 +380,16 @@ $('#draw-card img').on('click', drawCard);
 $(document).on('click', '.hand-card', playCard);
 
 $('ChooseColorForm').on('submit', function (evt) {
-    evt.preventDefault();
+    //evt.preventDefault();
     playCard();
     $('#ChooseColorForm').modal('hide');
     return getChosenColorFromModal();
     //playCard();
 });
 
-// $('#playerNames').modal();
+$('#playerNames').modal();
 
 //object in dem ich farbe speichere und dannim modalen aufruf mit übergeben (nach/statt hide)
 
-startGame();
+//startGame();
 

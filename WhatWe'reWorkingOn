@@ -4,7 +4,7 @@ Nr.	Anforderung – Das Unosystem …	Status	Hinweise
 	
 2	muss gleiche SpierlerInnen Namen verhindern.		
 3
-4	                                 	sile
+4	                                 	
 	
 6	
 7	
@@ -12,15 +12,15 @@ Nr.	Anforderung – Das Unosystem …	Status	Hinweise
 9			                                                                                                
 10	                                                                                                       	
 11	
-12	muss das Spielen einer Karte animieren.		
+12			
 13	
 14		
-15	muss das Abheben einer Karte animieren.		
-16	muss ungültige Aktionen animieren.		
+15	
+16			
 17	muss das Spiel beenden und SiegerIn visualisieren, wenn eine Person keine Karten mehr besitzt.		
 18	muss die Wahl einer Farbe erlauben, wenn eine Uno Sonderkarte gespielt wurde.		
 19	muss die gewählte Farbe nach einer Farbwahl visualisieren.		
-20	soll unnötige Anfragen an den Server verhindern. (z.B. Falsche Karte gespielt, nicht aktive SpielerIn versucht Karte zu spielen)		
+20			
 21	soll nett aussehen 		
 Alle weiteren Anforderungen sind KANN und sollten erst danach umgesetzt werden:
 •	Weitere Animationen
