@@ -100,9 +100,6 @@ async function getTopCard() {
 
 async function playCard(wildcolor, card) {
 
-    console.log(wildcolor);
-    // getTopCard.Color = wildcolor;
-
     let response = await fetch('https://nowaunoweb.azurewebsites.net/api/Game/PlayCard/' + game.Id + '?value=' + card.Value + '&color=' + card.Color + '&wildColor=' + wildcolor, {
         method: 'PUT',
         contentType: 'application/json',
@@ -113,30 +110,43 @@ async function playCard(wildcolor, card) {
 
     let result = await response.json();
 
-    // check if http error
     if (!response.ok) {
         showHTTPError(response);
         return;
     }
 
-    // check if validation error
     if ('error' in result) {
-        showValidationError(result);
+        //showValidationError(result);
         return;
     }
-
-    // everything is ok
-
-    //card.classList.add("bounce-out-top");
-
+    
     await reloadAllPlayerCards();
     game.TopCard = card;
-    if(game.TopCard.Color == 'Black'){
+    if (game.TopCard.Color == 'Black') {
         game.TopCard.Color = wildcolor;
     }
+
     setNextPlayer(result.Player);
     updatePlayerCards();
     updateTopCard();
+    for (let indexOfPlayer in game.Players) {
+        let player = game.Players[indexOfPlayer];
+        console.log(player.Player);
+        if (player.Cards.length == 0) {
+            if(indexOfPlayer == 0){
+                $('#winner-player-0').modal();
+            }
+            if(indexOfPlayer == 1){
+                $('#winner-player-1').modal();
+            }
+            if(indexOfPlayer == 2){
+                $('#winner-player-2').modal();
+            }
+            if(indexOfPlayer == 3){
+                $('#winner-player-3').modal();
+            }
+        }
+    }
 }
 
 async function getChosenColorFromModal(card) {
@@ -246,14 +256,9 @@ function updatePlayerCards() {
 function updateScores() {
     for (let indexOfPlayer in game.Players) {
         let player = game.Players[indexOfPlayer];
-        let $score = $('#score-' + indexOfPlayer);
+        let $score = document.querySelector('#score-' + indexOfPlayer);
 
         $score.innerText = player.Score;
-
-        if(player.Cards.length == 0){
-            alert("Congratulations, you won at a game my 2-year-old niece can win at");
-            // $score.addClass('roll-out-right');
-        }
     }
 }
 
@@ -291,7 +296,6 @@ function saveNamesFromModalDialog() {
     return { name1, name2, name3, name4 };
 }
 
-
 document.getElementById('playerNamesForm').addEventListener('submit', function (evt) {
     // // console.log("submit")
     evt.preventDefault();
@@ -314,29 +318,28 @@ $(document).on('click', '.hand-card', function () {
         player = game.Players[indexOfClickedPlayer],
         card = player.Cards[indexOfClickedCard];
 
-        if (game.NextPlayer != player.Player) {
-            //alert('These aren\'t your cards, now, are they?');
-            $clickedCard.addClass(".shake-horizontal");
-            return;
-        }
-    
-        if (card.Color != 'Black' && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
-            alert('Falsche Karte!');
-            $clickedCard.addClass("shake-horizontal");
-            return;
-        }
-    
-        if (card.Color == 'Black') {
-            $('#chooseColor').modal();
-            getChosenColorFromModal(card);
-        }
+    if (game.NextPlayer != player.Player) {
+        //alert('These aren\'t your cards, now, are they?');
+        $clickedCard.addClass(".shake-horizontal");
+        return;
+    }
 
-        if (card.Value == game.TopCard.Value || card.Color == game.TopCard.Color){
-            let wildcolor = "";
-            $clickedCard.addClass("bounce-out-top");
-            playCard(wildcolor, card);
-        }
+    if (card.Color != 'Black' && card.Value != game.TopCard.Value && card.Color != game.TopCard.Color) {
+        //alert('Falsche Karte!');
+        $clickedCard.addClass("shake-horizontal");
+        return;
+    }
 
+    if (card.Color == 'Black') {
+        $('#chooseColor').modal();
+        getChosenColorFromModal(card);
+    }
+
+    if (card.Value == game.TopCard.Value || card.Color == game.TopCard.Color) {
+        let wildcolor = "";
+        $clickedCard.addClass("bounce-out-top");
+        playCard(wildcolor, card);
+    }
 });
 
 //$('#playerNames').modal();
