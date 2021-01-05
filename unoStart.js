@@ -135,7 +135,6 @@ async function playCard(wildcolor, card) {
 function checkIfThereIsAWinner() {
     for (let indexOfPlayer in game.Players) {
         let player = game.Players[indexOfPlayer];
-        console.log(player.Player);
         if (player.Cards.length == 0) {
             if (indexOfPlayer == 0) {
                 $('#winner-player-0 .modal-title').text('Congratulations ' + player.Player);
@@ -232,7 +231,6 @@ function updateTopCard() {
     getTopCard();
     let $topCardImg = document.querySelector('#top-card img');
     $topCardImg.setAttribute('src', './cardImages/' + game.TopCard.Color + game.TopCard.Value + '.png');
-    console.log(game.TopCard);
 }
 
 function updatePlayerCards() {
@@ -277,9 +275,11 @@ function highlightCurrentPlayer() {
 
     $('.player').css('font-weight', 'normal');
     $('.col-6').css('opacity', '50%');
+    $('.player').css('color', 'white'); 
 
     $playerName.css('font-weight', 'bold');
     $playerWithCards.css('opacity', '100%');
+    //$playerName.css('color','#ffdd00');
 }
 
 function showNamesOnPlaymat(name1, name2, name3, name4) {
@@ -308,7 +308,6 @@ function saveNamesFromModalDialog() {
 }
 
 document.getElementById('playerNamesForm').addEventListener('submit', function (evt) {
-    // // console.log("submit")
     evt.preventDefault();
     //TODO check if names are the same & there are 4 names
     $('#playerNames').modal('hide');
@@ -321,6 +320,31 @@ document.getElementById('playerNamesForm').addEventListener('submit', function (
 });
 
 $('#draw-card img').on('click', drawCard);
+
+document.getElementById('winner-0-form').addEventListener('submit', function () {
+    $('#winner-player-0').modal('hide');
+    window.location.reload;
+});
+
+document.getElementById('winner-1-form').addEventListener('submit', function () {
+    $('#winner-player-1').modal('hide');
+    window.location.reload;
+});
+
+document.getElementById('winner-2-form').addEventListener('submit', function () {
+    $('#winner-player-2').modal('hide');
+    window.location.reload;
+});
+
+document.getElementById('winner-3-form').addEventListener('submit', function () {
+    $('#winner-player-3').modal('hide');
+    window.location.reload;
+});
+
+// $('#winner-player-0').on('click', window.location.reload);
+// $('#winner-player-1').on('click', window.location.reload);
+// $('#winner-player-2').on('click', window.location.reload);
+// $('#winner-player-3').on('click', window.location.reload);
 
 $(document).on('click', '.hand-card', function () {
     let $clickedCard = $(this),
