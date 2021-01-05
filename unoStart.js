@@ -119,7 +119,7 @@ async function playCard(wildcolor, card) {
         //showValidationError(result);
         return;
     }
-    
+
     await reloadAllPlayerCards();
     game.TopCard = card;
     if (game.TopCard.Color == 'Black') {
@@ -129,20 +129,28 @@ async function playCard(wildcolor, card) {
     setNextPlayer(result.Player);
     updatePlayerCards();
     updateTopCard();
+    checkIfThereIsAWinner();
+}
+
+function checkIfThereIsAWinner() {
     for (let indexOfPlayer in game.Players) {
         let player = game.Players[indexOfPlayer];
         console.log(player.Player);
         if (player.Cards.length == 0) {
-            if(indexOfPlayer == 0){
+            if (indexOfPlayer == 0) {
+                $('#winner-player-0 .modal-title').text('Congratulations ' + player.Player);
                 $('#winner-player-0').modal();
             }
-            if(indexOfPlayer == 1){
+            if (indexOfPlayer == 1) {
+                $('#winner-player-1 .modal-title').text('Congratulations ' + player.Player);
                 $('#winner-player-1').modal();
             }
-            if(indexOfPlayer == 2){
+            if (indexOfPlayer == 2) {
+                $('#winner-player-2 .modal-title').text('Congratulations ' + player.Player);
                 $('#winner-player-2').modal();
             }
-            if(indexOfPlayer == 3){
+            if (indexOfPlayer == 3) {
+                $('#winner-player-3 .modal-title').text('Congratulations ' + player.Player);
                 $('#winner-player-3').modal();
             }
         }
@@ -264,11 +272,14 @@ function updateScores() {
 
 function highlightCurrentPlayer() {
     let indexOfPlayer = getIndexOfPlayer(game.NextPlayer),
-        $playerName = $('#player-' + indexOfPlayer);
+        $playerName = $('#player-' + indexOfPlayer),
+        $playerWithCards = $('#player-cards-' + indexOfPlayer);
 
-    $('.player').css('font-weight', 'normal'); +
+    $('.player').css('font-weight', 'normal');
+    $('.col-6').css('opacity', '50%');
 
-        $playerName.css('font-weight', 'bold');
+    $playerName.css('font-weight', 'bold');
+    $playerWithCards.css('opacity', '100%');
 }
 
 function showNamesOnPlaymat(name1, name2, name3, name4) {
