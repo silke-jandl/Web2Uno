@@ -1,12 +1,57 @@
 /* div {
     border: solid red;
 } */
+.fullscreen{
+        width: 100%;
+        padding-left: 30px;
+        
+}
+#draw-card{
+        color: white;
+}
+#top-card{
+        color: white;
+}
+#score-0{
+        color: white;
+}
 
+#score-1{
+        color: white;
+}
+#score-2{
+        color:white;
+}
+#score-3{
+        color:white;
+}
 .player {
         color: white;
 }
 
-.points {
+.card-row-right {
+        text-align: right;
+}
+.row justify-contents-between{
+    width : 100%;
+}
+
+.hand-card img {
+    width: 50px;
+    margin: 3px;
+}
+.playground{
+display: flex;
+justify-content: center;
+
+
+}
+.stack{
+        margin-left: 40px;
+        margin-right: 40px;
+}
+
+.player {
         color: white;
 }
 
@@ -17,6 +62,7 @@
 .hand-card img {
     width: 50px;
 }
+
 
 body {
     background-image: url("uno-background2.jpg");
