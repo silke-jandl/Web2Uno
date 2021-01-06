@@ -125,11 +125,36 @@ async function playCard(wildcolor, card) {
     if (game.TopCard.Color == 'Black') {
         game.TopCard.Color = wildcolor;
     }
-
-    setNextPlayer(result.Player);
+    checkIfUno(result);
+         $('#uno').css('visibility', 'hidden');
     updatePlayerCards();
     updateTopCard();
     checkIfThereIsAWinner();
+}
+$('#uno').css('visibility', 'hidden');
+
+function checkIfUno(result) {
+    for (let indexOfPlayer in game.Players) {
+        let player = game.Players[indexOfPlayer];
+        if (player.Cards.length == 1) {
+            $('#uno').css('visibility', 'visible');
+            setNextPlayer(result.Player);
+            $('#call-uno').on('click', setTimeout(callUno, 3000));
+       } else {
+            setNextPlayer(result.Player);
+        }
+    }
+}
+
+function callUno(){
+    $('#logo').addClass('roll-out-left').delay(1000);
+    setTimeout(getRidOfUnoButton, 1000);
+}
+
+function getRidOfUnoButton(){
+    if($('#uno').css('visibility', 'visible')){
+        $('#uno').css('visibility', 'hidden');
+    } 
 }
 
 function checkIfThereIsAWinner() {
@@ -275,7 +300,7 @@ function highlightCurrentPlayer() {
 
     $('.player').css('font-weight', 'normal');
     $('.col-6').css('opacity', '50%');
-    $('.player').css('color', 'white'); 
+    $('.player').css('color', 'white');
 
     $playerName.css('font-weight', 'bold');
     $playerWithCards.css('opacity', '100%');
@@ -320,6 +345,8 @@ document.getElementById('playerNamesForm').addEventListener('submit', function (
 });
 
 $('#draw-card img').on('click', drawCard);
+
+$('#uno').css('visibility', 'hidden');
 
 document.getElementById('winner-0-form').addEventListener('submit', function () {
     $('#winner-player-0').modal('hide');
