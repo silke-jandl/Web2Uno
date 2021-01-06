@@ -25,11 +25,26 @@
 }
 
 .hand-card img {
-        width: 50px;
+        width: 70px;
         margin: 3px;
 }
 
-#logo{
+.hand-card img:hover {
+        box-shadow: 0 0 2px 1px silver;
+        border-radius: 10px;
+}
+
+#top-card img:hover {
+        box-shadow: 0 0 3px 3px silver;
+        border-radius: 22px;
+}
+
+#draw-card img:hover {
+        box-shadow: 0 0 3px 3px silver;
+        border-radius: 22px;
+}
+
+#logo {
         height: 50px
 }
 
@@ -55,10 +70,6 @@ cards-container {
 
 .row justify-contents-between {
         width: 100%;
-}
-
-.hand-card img {
-        width: 70px;
 }
 
 body {
@@ -111,14 +122,162 @@ footer>p {
         animation: bounce-out-top 1.5s both;
 }
 
-@-webkit-keyframes bounce-out-top{0%{-webkit-transform:translateY(0);transform:translateY(0);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}5%{-webkit-transform:translateY(-30px);transform:translateY(-30px);-webkit-animation-timing-function:ease-in;animation-timing-function:ease-in}15%{-webkit-transform:translateY(0);transform:translateY(0);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}25%{-webkit-transform:translateY(-38px);transform:translateY(-38px);-webkit-animation-timing-function:ease-in;animation-timing-function:ease-in}38%{-webkit-transform:translateY(0);transform:translateY(0);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}52%{-webkit-transform:translateY(-75px);transform:translateY(-75px);-webkit-animation-timing-function:ease-in;animation-timing-function:ease-in}70%{-webkit-transform:translateY(0);transform:translateY(0);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}85%{opacity:1}100%{-webkit-transform:translateY(-800px);transform:translateY(-800px);opacity:0}}@keyframes bounce-out-top{0%{-webkit-transform:translateY(0);transform:translateY(0);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}5%{-webkit-transform:translateY(-30px);transform:translateY(-30px);-webkit-animation-timing-function:ease-in;animation-timing-function:ease-in}15%{-webkit-transform:translateY(0);transform:translateY(0);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}25%{-webkit-transform:translateY(-38px);transform:translateY(-38px);-webkit-animation-timing-function:ease-in;animation-timing-function:ease-in}38%{-webkit-transform:translateY(0);transform:translateY(0);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}52%{-webkit-transform:translateY(-75px);transform:translateY(-75px);-webkit-animation-timing-function:ease-in;animation-timing-function:ease-in}70%{-webkit-transform:translateY(0);transform:translateY(0);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}85%{opacity:1}100%{-webkit-transform:translateY(-800px);transform:translateY(-800px);opacity:0}}
+@-webkit-keyframes bounce-out-top {
+        0% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out
+        }
+        5% {
+                -webkit-transform: translateY(-30px);
+                transform: translateY(-30px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in
+        }
+        15% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out
+        }
+        25% {
+                -webkit-transform: translateY(-38px);
+                transform: translateY(-38px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in
+        }
+        38% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out
+        }
+        52% {
+                -webkit-transform: translateY(-75px);
+                transform: translateY(-75px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in
+        }
+        70% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out
+        }
+        85% {
+                opacity: 1
+        }
+        100% {
+                -webkit-transform: translateY(-800px);
+                transform: translateY(-800px);
+                opacity: 0
+        }
+}
+
+@keyframes bounce-out-top {
+        0% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out
+        }
+        5% {
+                -webkit-transform: translateY(-30px);
+                transform: translateY(-30px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in
+        }
+        15% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out
+        }
+        25% {
+                -webkit-transform: translateY(-38px);
+                transform: translateY(-38px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in
+        }
+        38% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out
+        }
+        52% {
+                -webkit-transform: translateY(-75px);
+                transform: translateY(-75px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in
+        }
+        70% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out
+        }
+        85% {
+                opacity: 1
+        }
+        100% {
+                -webkit-transform: translateY(-800px);
+                transform: translateY(-800px);
+                opacity: 0
+        }
+}
 
 .shake-horizontal {
         -webkit-animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
         animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
 }
 
-@-webkit-keyframes shake-horizontal{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%{-webkit-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%{-webkit-transform:translateX(10px);transform:translateX(10px)}80%{-webkit-transform:translateX(8px);transform:translateX(8px)}90%{-webkit-transform:translateX(-8px);transform:translateX(-8px)}}@keyframes shake-horizontal{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%{-webkit-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%{-webkit-transform:translateX(10px);transform:translateX(10px)}80%{-webkit-transform:translateX(8px);transform:translateX(8px)}90%{-webkit-transform:translateX(-8px);transform:translateX(-8px)}}
+@-webkit-keyframes shake-horizontal {
+        0%, 100% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0)
+        }
+        10%, 30%, 50%, 70% {
+                -webkit-transform: translateX(-10px);
+                transform: translateX(-10px)
+        }
+        20%, 40%, 60% {
+                -webkit-transform: translateX(10px);
+                transform: translateX(10px)
+        }
+        80% {
+                -webkit-transform: translateX(8px);
+                transform: translateX(8px)
+        }
+        90% {
+                -webkit-transform: translateX(-8px);
+                transform: translateX(-8px)
+        }
+}
+
+@keyframes shake-horizontal {
+        0%, 100% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0)
+        }
+        10%, 30%, 50%, 70% {
+                -webkit-transform: translateX(-10px);
+                transform: translateX(-10px)
+        }
+        20%, 40%, 60% {
+                -webkit-transform: translateX(10px);
+                transform: translateX(10px)
+        }
+        80% {
+                -webkit-transform: translateX(8px);
+                transform: translateX(8px)
+        }
+        90% {
+                -webkit-transform: translateX(-8px);
+                transform: translateX(-8px)
+        }
+}
 
 .slide-out-elliptic-top-bck {
         -webkit-animation: slide-out-elliptic-top-bck .7s ease-in both;
@@ -207,7 +366,10 @@ footer>p {
         }
 }
 
-.roll-out-right{-webkit-animation:roll-out-right .6s ease-in infinite both;animation:roll-out-right .6s ease-in infinite both}
+.roll-out-right {
+        -webkit-animation: roll-out-right .6s ease-in infinite both;
+        animation: roll-out-right .6s ease-in infinite both
+}
 
 /* ----------------------------------------------
  * Generated by Animista on 2021-1-6 11:39:52
@@ -216,7 +378,31 @@ footer>p {
  * w: http://animista.net, t: @cssanimista
  * ---------------------------------------------- */
 
- @-webkit-keyframes roll-out-right{0%{-webkit-transform:translateX(0) rotate(0deg);transform:translateX(0) rotate(0deg);opacity:1}100%{-webkit-transform:translateX(1000px) rotate(540deg);transform:translateX(1000px) rotate(540deg);opacity:0}}@keyframes roll-out-right{0%{-webkit-transform:translateX(0) rotate(0deg);transform:translateX(0) rotate(0deg);opacity:1}100%{-webkit-transform:translateX(1000px) rotate(540deg);transform:translateX(1000px) rotate(540deg);opacity:0}}
+@-webkit-keyframes roll-out-right {
+        0% {
+                -webkit-transform: translateX(0) rotate(0deg);
+                transform: translateX(0) rotate(0deg);
+                opacity: 1
+        }
+        100% {
+                -webkit-transform: translateX(1000px) rotate(540deg);
+                transform: translateX(1000px) rotate(540deg);
+                opacity: 0
+        }
+}
+
+@keyframes roll-out-right {
+        0% {
+                -webkit-transform: translateX(0) rotate(0deg);
+                transform: translateX(0) rotate(0deg);
+                opacity: 1
+        }
+        100% {
+                -webkit-transform: translateX(1000px) rotate(540deg);
+                transform: translateX(1000px) rotate(540deg);
+                opacity: 0
+        }
+}
 
 .roll-in-left {
         -webkit-animation: roll-in-left .6s ease-out both;
@@ -298,7 +484,10 @@ footer>p {
         }
 }
 
-.slide-out-fwd-center{-webkit-animation:slide-out-fwd-center .7s cubic-bezier(.55,.085,.68,.53) both;animation:slide-out-fwd-center .7s cubic-bezier(.55,.085,.68,.53) both}
+.slide-out-fwd-center {
+        -webkit-animation: slide-out-fwd-center .7s cubic-bezier(.55, .085, .68, .53) both;
+        animation: slide-out-fwd-center .7s cubic-bezier(.55, .085, .68, .53) both
+}
 
 /* ----------------------------------------------
  * Generated by Animista on 2021-1-6 10:1:22
@@ -307,9 +496,36 @@ footer>p {
  * w: http://animista.net, t: @cssanimista
  * ---------------------------------------------- */
 
- @-webkit-keyframes slide-out-fwd-center{0%{-webkit-transform:translateZ(1);transform:translateZ(1);opacity:1}100%{-webkit-transform:translateZ(600px);transform:translateZ(600px);opacity:0}}@keyframes slide-out-fwd-center{0%{-webkit-transform:translateZ(1);transform:translateZ(1);opacity:1}100%{-webkit-transform:translateZ(600px);transform:translateZ(600px);opacity:0}}
+@-webkit-keyframes slide-out-fwd-center {
+        0% {
+                -webkit-transform: translateZ(1);
+                transform: translateZ(1);
+                opacity: 1
+        }
+        100% {
+                -webkit-transform: translateZ(600px);
+                transform: translateZ(600px);
+                opacity: 0
+        }
+}
 
- .text-pop-up-top{-webkit-animation:text-pop-up-top .5s cubic-bezier(.25,.46,.45,.94) both;animation:text-pop-up-top .5s cubic-bezier(.25,.46,.45,.94) both}
+@keyframes slide-out-fwd-center {
+        0% {
+                -webkit-transform: translateZ(1);
+                transform: translateZ(1);
+                opacity: 1
+        }
+        100% {
+                -webkit-transform: translateZ(600px);
+                transform: translateZ(600px);
+                opacity: 0
+        }
+}
+
+.text-pop-up-top {
+        -webkit-animation: text-pop-up-top .5s cubic-bezier(.25, .46, .45, .94) both;
+        animation: text-pop-up-top .5s cubic-bezier(.25, .46, .45, .94) both
+}
 
 /* ----------------------------------------------
  * Generated by Animista on 2021-1-6 10:40:24
@@ -318,15 +534,74 @@ footer>p {
  * w: http://animista.net, t: @cssanimista
  * ---------------------------------------------- */
 
- @-webkit-keyframes text-pop-up-top{0%{-webkit-transform:translateY(0);transform:translateY(0);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;text-shadow:none}100%{-webkit-transform:translateY(-50px);transform:translateY(-50px);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;text-shadow:0 1px 0 #ccc,0 2px 0 #ccc,0 3px 0 #ccc,0 4px 0 #ccc,0 5px 0 #ccc,0 6px 0 #ccc,0 7px 0 #ccc,0 8px 0 #ccc,0 9px 0 #ccc,0 50px 30px rgba(0,0,0,.3)}}@keyframes text-pop-up-top{0%{-webkit-transform:translateY(0);transform:translateY(0);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;text-shadow:none}100%{-webkit-transform:translateY(-50px);transform:translateY(-50px);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;text-shadow:0 1px 0 #ccc,0 2px 0 #ccc,0 3px 0 #ccc,0 4px 0 #ccc,0 5px 0 #ccc,0 6px 0 #ccc,0 7px 0 #ccc,0 8px 0 #ccc,0 9px 0 #ccc,0 50px 30px rgba(0,0,0,.3)}}
+@-webkit-keyframes text-pop-up-top {
+        0% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+                text-shadow: none
+        }
+        100% {
+                -webkit-transform: translateY(-50px);
+                transform: translateY(-50px);
+                -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+                text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc, 0 5px 0 #ccc, 0 6px 0 #ccc, 0 7px 0 #ccc, 0 8px 0 #ccc, 0 9px 0 #ccc, 0 50px 30px rgba(0, 0, 0, .3)
+        }
+}
 
- .roll-out-left{-webkit-animation:roll-out-left .6s ease-in both;animation:roll-out-left .6s ease-in both}
+@keyframes text-pop-up-top {
+        0% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+                text-shadow: none
+        }
+        100% {
+                -webkit-transform: translateY(-50px);
+                transform: translateY(-50px);
+                -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+                text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc, 0 5px 0 #ccc, 0 6px 0 #ccc, 0 7px 0 #ccc, 0 8px 0 #ccc, 0 9px 0 #ccc, 0 50px 30px rgba(0, 0, 0, .3)
+        }
+}
 
- /* ----------------------------------------------
+.roll-out-left {
+        -webkit-animation: roll-out-left .6s ease-in both;
+        animation: roll-out-left .6s ease-in both
+}
+
+/* ----------------------------------------------
  * Generated by Animista on 2021-1-6 11:9:25
  * Licensed under FreeBSD License.
  * See http://animista.net/license for more info. 
  * w: http://animista.net, t: @cssanimista
  * ---------------------------------------------- */
 
-@-webkit-keyframes roll-out-left{0%{-webkit-transform:translateX(0) rotate(0deg);transform:translateX(0) rotate(0deg);opacity:1}100%{-webkit-transform:translateX(-1000px) rotate(-540deg);transform:translateX(-1000px) rotate(-540deg);opacity:0}}@keyframes roll-out-left{0%{-webkit-transform:translateX(0) rotate(0deg);transform:translateX(0) rotate(0deg);opacity:1}100%{-webkit-transform:translateX(-1000px) rotate(-540deg);transform:translateX(-1000px) rotate(-540deg);opacity:0}}
+@-webkit-keyframes roll-out-left {
+        0% {
+                -webkit-transform: translateX(0) rotate(0deg);
+                transform: translateX(0) rotate(0deg);
+                opacity: 1
+        }
+        100% {
+                -webkit-transform: translateX(-1000px) rotate(-540deg);
+                transform: translateX(-1000px) rotate(-540deg);
+                opacity: 0
+        }
+}
+
+@keyframes roll-out-left {
+        0% {
+                -webkit-transform: translateX(0) rotate(0deg);
+                transform: translateX(0) rotate(0deg);
+                opacity: 1
+        }
+        100% {
+                -webkit-transform: translateX(-1000px) rotate(-540deg);
+                transform: translateX(-1000px) rotate(-540deg);
+                opacity: 0
+        }
+}
